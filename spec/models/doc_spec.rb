@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe Doc do
+require "rails_helper"
+
+RSpec.describe Doc, type: :model do
 
   it { should have_many :doc_versions }
 

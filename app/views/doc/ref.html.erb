@@ -7,11 +7,15 @@
   <div class='callout quickref'>
     <p>
       Quick reference guides:
-      <a href="https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf">GitHub Cheat Sheet</a>
-      <small class='light'>(PDF) &nbsp;|&nbsp;</small>
-      <a href="http://ndpsoftware.com/git-cheatsheet.html">Visual Git Cheat Sheet</a>
+      <%= link_to "GitHub Cheat Sheet", "https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf" %>
+      <small class='light'>(PDF)</small>
+      |
+      <%= link_to "Visual Git Cheat Sheet", "https://ndpsoftware.com/git-cheatsheet.html" %>
       <small class='light'>(SVG | PNG)</small>
     </p>
+  </div>
+  <div class="callout all-commands">
+    <a href="/docs/git#_git_commands">Complete list of all commands<a/>
   </div>
   <div class='reference-menu'>
     <div class='two-column'>
@@ -23,9 +27,10 @@
         <%= render 'shared/ref/sharing' %>
         <%= render 'shared/ref/inspection' %>
         <%= render 'shared/ref/patching' %>
+        <%= render 'shared/ref/debugging' %>
       </div>
       <div class='column-right'>
-        <%= render 'shared/ref/debugging' %>
+        <%= render 'shared/ref/guides' %>
         <%= render 'shared/ref/email' %>
         <%= render 'shared/ref/external' %>
         <%= render 'shared/ref/admin' %>

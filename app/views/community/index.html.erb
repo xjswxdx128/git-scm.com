@@ -12,7 +12,7 @@
   <h2> Mailing List</h2>
 
   <p>
-    Questions or comments for the Git community can be sent to the mailing list by using the email address <a href="mailto:git@vger.kernel.org">git@vger.kernel.org</a>. <strong>Bug reports should be sent to this mailing list.</strong>
+    Questions or comments for the Git community can be sent to the mailing list by using the email address <a href="mailto:git@vger.kernel.org">git@vger.kernel.org</a>. <strong>Bug reports for git should be sent to this mailing list.</strong>
   </p>
 
   <p>
@@ -20,19 +20,35 @@
   </p>
 
   <p>
-    The <a href="http://dir.gmane.org/gmane.comp.version-control.git">archive</a> can be found on Gmane.  Click <a href="mailto:majordomo@vger.kernel.org?body=subscribe git">here</a> to subscribe. If you have trouble sending to the list with your regular mail reader, you may also <a href="http://post.gmane.org/post.php?group=gmane.comp.version-control.git">post via gmane</a>.
+    By subscribing (click <a href="mailto:majordomo@vger.kernel.org?body=subscribe git">here</a>), you can make sure you're not missing follow-up discussions and you can also learn about other development in the community.  The list <a href="https://public-inbox.org/git">archive</a> can be found on public-inbox.
+  </p>
+
+  <p>
+    Windows-specific questions can also be sent to the <a href="https://groups.google.com/forum/?fromgroups#!forum/git-for-windows">Git for Windows mailing list</a> (if in doubt whether your question is Windows-specific, just use the general Git mailing list). Please submit Windows-specific bugs to <a href="https://github.com/git-for-windows/git/issues">Git for Windows' bug tracker</a>.
   </p>
 
   <p>
     There is also <a href="https://groups.google.com/forum/?fromgroups#!forum/git-users">Git user mailing list</a> on Google Groups which is a nice place for beginners to ask about anything.
+    If you're a downstream packager of Git, consider joining the <a href="https://groups.google.com/forum/?fromgroups#!forum/git-packagers">Git packagers mailing list</a> for low-volume announcements from the developers, as well as other discussion related to packaging &amp; porting Git.
   </p>
 
   <h2> Bug Reporting </h2>
 
   <p>
-    Bugs can be reported directly to the mailing list (see above for
+    Bugs in git can be reported directly to the mailing list (see above for
     details). Note that you do not need to subscribe to the list to send
-    to it.
+    to it. You can help us out by attempting to reproduce the bug in the latest
+    released version of git, or if you're willing to build git from source, the
+    <a href="https://github.com/git/git/tree/next"><code>next</code> branch</a>.
+    Sometimes an attempted fix may be pending in this branch, in which case
+    your feedback as to whether the fix worked for you will be appreciated.
+  </p>
+
+  <p>
+    Bugs related to this website can be reported at its
+    <a href="https://github.com/git/git-scm.com/issues">issue tracker</a>.
+    Bugs related to the content of the "Pro Git" book can be reported at its
+    <a href="https://github.com/progit/progit2">issue tracker</a>.
   </p>
 
   <p>
@@ -41,18 +57,26 @@
       guide</a> helpful for producing useful bug reports.
   </p>
 
+  <h2> Reporting Security Issues </h2>
+
+  <p>
+    Issues which are security relevant should be disclosed privately to
+    the <a href="mailto:git-security@googlegroups.com">Git Security</a> mailing list.
+  </p>
+
   <h2> IRC Channel </h2>
 
   <p>
     If the manpages and this book aren’t enough and you need in-person help, you can try the <span class="highlight fixed">#git</span> channel on the Freenode IRC server (<strong>irc.freenode.net</strong>). These channels are regularly filled with hundreds of people who are all very knowledgeable about Git and are often willing to help.
+    The <span class="highlight fixed">#git-devel</span> channel welcomes Git development discussion, and might be able to help you contribute to Git.
   </p>
 
   <p>
-    If you need specific help about one of the for-profit Git hosting sites, you might try their own IRC channels (such as <span class="highlight fixed">#github</span> or <span class="highlight fixed">#gitorious</span>) on the same IRC server.
+    If you need specific help about one of the for-profit Git hosting sites, you might try their own IRC channels (such as <span class="highlight fixed">#github</span> or <span class="highlight fixed">#gitlab</span>) on the same IRC server.
   </p>
 
   <h2> Contributing to Git </h2>
 
   <p>
-    The <a href="https://github.com/git/git/tree/master/Documentation">Documentation directory</a> in the Git source code has several files of interest to developers who are looking to help contribute. After reading the <a href="https://github.com/git/git/blob/master/Documentation/CodingGuidelines">coding guidelines</a>, you can learn <a href="https://github.com/git/git/blob/master/Documentation/SubmittingPatches">how to submit patches</a>. For those looking to get more deeply involved, there is a <a href="https://github.com/git/git/blob/master/Documentation/howto/maintain-git.txt">howto for Git maintainers</a>.
+    The <a href="https://github.com/git/git/tree/master/Documentation">Documentation directory</a> in the Git source code has several files of interest to developers who are looking to help contribute. After reading the <a href="https://github.com/git/git/blob/master/Documentation/CodingGuidelines">coding guidelines</a>, you can learn <a href="/docs/SubmittingPatches">how to submit patches</a>. If you are just starting out, you can read the <a href="/docs/MyFirstContribution">My First Contribution tutorial</a>. For those looking to get more deeply involved, there is a <a href="https://github.com/git/git/blob/master/Documentation/howto/maintain-git.txt">howto for Git maintainers</a>.
   </p>

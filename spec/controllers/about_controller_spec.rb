@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe AboutController do
+require "rails_helper"
+
+RSpec.describe AboutController, type: :controller do
 
   it "GET index" do
     get :index

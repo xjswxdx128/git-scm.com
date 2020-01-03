@@ -1,10 +1,34 @@
+# coding: utf-8
+# frozen_string_literal: true
+
 # t.string :name
 # t.timestamps
-class DocFile < ActiveRecord::Base
+class DocFile < ApplicationRecord
   has_many :doc_versions
   has_many :versions, through: :doc_versions
 
-  scope :with_includes, ->{ includes(:doc_versions => [:doc, :version]) }
+  scope :with_includes, -> { includes(doc_versions: [:doc, :version]) }
+
+  @@true_lang={
+      "de"=>"Deutsch",
+      "en"=>"English",
+      "fr"=>"Français",
+      "hu"=>"magyar",
+      "nb_NO"=>"Norsk bokmål",
+      "nl"=>"Nederlands",
+      "pt_BR"=>"Português (Brasil)",
+      "zh_HANS-CN" =>"简体中文"
+    }
+
+  def true_lang
+    @@true_lang
+  end
+
+  def languages
+    self.doc_versions.select(:language).distinct.collect do |v|
+      [v[:language], @@true_lang[v[:language]] || v[:language]]
+    end
+  end
 
   def version_changes(limit_size = 100)
     unchanged_versions = []
@@ -33,6 +57,6 @@ class DocFile < ActiveRecord::Base
 
   # TODO: parse file for description
   def description
-    ''
+    ""
   end
 end

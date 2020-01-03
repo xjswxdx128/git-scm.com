@@ -1,104 +1,111 @@
-Gitscm::Application.routes.draw do
+# frozen_string_literal: true
 
-  constraints(:host => 'whygitisbetterthanx.com') do
-    root :to => 'site#redirect_wgibtx', as: :whygitisbetterthanx
+Rails.application.routes.draw do
+  constraints(host: "whygitisbetterthanx.com") do
+    root to: "site#redirect_wgibtx", as: :whygitisbetterthanx
   end
 
-  constraints(:host => 'progit.org') do
-    root :to => 'site#redirect_book', as: :progit
-    get '*path' => 'site#redirect_book'
+  constraints(host: "progit.org") do
+    root to: "site#redirect_book", as: :progit
+    get "*path" => "site#redirect_book"
   end
-
-#  constraints(:subdomain => 'book') do
-#    root :to => 'site#redirect_book'
-#    get '*path' => 'site#redirect_combook'
-#  end
 
   get "site/index"
 
-  get "/doc" => "doc#index"
-  get "/docs" => "doc#ref"
-  get "/docs/howto/:file", to: redirect {|path_params, req|
-    "https://github.com/git/git/blob/master/Documentation/howto/#{path_params[:file]}.txt"
-  }
-  get "/docs/:file.html" => "doc#man", :as => :doc_file_html, :file => /[\w\-\.]+/
-  get "/docs/:file" => "doc#man", :as => :doc_file, :file => /[\w\-\.]+/
-  get "/docs/:file/:version" => "doc#man", :version => /[^\/]+/
-  get "/test" => "doc#test"
-  get "/doc/ext" => "doc#ext"
+  scope :doc, as: :doc do
+    get "/"    => "doc#index"
+    get "/ext" => "doc#ext"
+  end
 
-  %w{man ref git}.each do |path|
+  scope :docs, as: :docs do
+    get "/" => "doc#ref"
+  end
+
+  scope :docs do
+    get "/howto/:file", to: redirect { |path_params, _req|
+      "https://github.com/git/git/blob/master/Documentation/howto/#{path_params[:file]}.txt"
+    }
+
+    get "/:file.html" => "doc#man", :as => :doc_file_html, :file => /[\w\-\.]+/
+    get "/:file"      => "doc#man", :as => :doc_file,      :file => /[\w\-\.]+/
+
+    get "/:file/:version" => "doc#man", :version => /[^\/]+/
+  end
+
+  %w[man ref git].each do |path|
     get "/#{path}/:file" => redirect("/docs/%{file}")
-    get "/#{path}/:file/:version" => redirect("/docs/%{file}/%{version}"),
-    :version => /[^\/]+/
+    get "/#{path}/:file/:version" => redirect("/docs/%{file}/%{version}"), :version => /[^\/]+/
   end
 
   resource :book do
-    get "/ch:chapter-:section.html"    => "books#chapter"
+    get "/ch:chapter-:section.html"       => "books#chapter"
     get "/:lang/ch:chapter-:section.html" => "books#chapter"
-    get "/index"                          => redirect("/book")
-    get "/commands"                       => "books#commands"
-    get "/:lang/v:edition"                => "books#show"
-    get "/:lang/v:edition/:slug"          => "books#section"
-    get "/:lang/v:edition/:chapter/:link" => "books#link", chapter: /(ch|app)\d+/
-    get "/:lang"                          => "books#show", as: :lang
-    get "/:lang/:slug"                    => "books#section"
+
+    get "/index"    => redirect("/book")
+    get "/commands" => redirect("/docs")
+
+    nested do
+      scope ":lang" do
+        get "/v1"                => redirect("/book/%{lang}/v2")
+        get "/v1/:slug"          => redirect("/book/%{lang}/v2/%{slug}")
+        get "/v1/:chapter/:link" => redirect("/book/%{lang}/v2/%{chapter}/%{link}")
+
+        get "/v:edition"                => "books#show"
+        get "/v:edition/:slug"          => "books#section"
+        get "/v:edition/:chapter/:link" => "books#link", :chapter => /(ch|app)\d+/
+
+        get "/"      => "books#show",    :as => :lang
+        get "/:slug" => "books#section", :as => :slug
+      end
+    end
   end
-  post "/update"   => "books#update"
 
-  get "/download"               => "downloads#index"
-  get "/download/:platform"     => "downloads#download"
-  get "/download/gui/:platform" => "downloads#gui"
+  scope :download, as: :download do
+    get "/"              => "downloads#index"
+    get "/:platform"     => "downloads#download"
+    get "/gui/:platform" => "downloads#gui"
+  end
 
-  resources :downloads, :only => [:index] do
+  resources :downloads, only: [:index] do
     collection do
       get "/guis"       => "downloads#guis"
       get "/installers" => "downloads#installers"
-      get "/logos"       => "downloads#logos"
+      get "/logos"      => "downloads#logos"
       get "/latest"     => "downloads#latest"
     end
   end
 
-  get "/:year/:month/:day/:slug" => "blog#post",  :year   => /\d{4}/,
-                                                    :month  => /\d{2}/,
-                                                    :day    => /\d{2}/
-
-  get "/blog/:year/:month/:day/:slug" => "blog#post",  :year   => /\d{4}/,
-                                                    :month  => /\d{2}/,
-                                                    :day    => /\d{2}/
-
-  get "/blog.rss" => "blog#feed"
   get "/blog" => "blog#index"
+  get "/blog/*post" => redirect("/blog")
+  get "/:year/:month/:day/:slug" => redirect("/blog"), :year => /\d{4}/, :month => /\d{2}/, :day => /\d{2}/
 
-  get "/publish"  => "doc#book_update"
-  post "/related" => "doc#related_update"
-
-  get "/about" => "about#index"
+  get "/about"          => "about#index"
   get "/about/:section" => "about#index"
 
-  get "/videos" => "doc#videos"
+  get "/videos"    => "doc#videos"
   get "/video/:id" => "doc#watch"
 
   get "/community" => "community#index"
 
-  get "/admin" => "site#admin"
-
-  get "/search" => "site#search"
+  get "/search"         => "site#search"
   get "/search/results" => "site#search_results"
 
-  # mapping for jasons mocks
-  get "/documentation" => "doc#index"
-  get "/documentation/reference" => "doc#ref"
-  get "/documentation/reference/:file.html" => "doc#man"
-  get "/documentation/book" => "doc#book"
-  get "/documentation/videos" => "doc#videos"
-  get "/documentation/external-links" => "doc#ext"
+  # historical synonyms
+  namespace :documentation do
+    get "/"                     => redirect("/doc")
+    get "/reference"            => redirect("/docs")
+    get "/reference/:file.html" => redirect { |path_params, _req| "/docs/#{path_params[:file]}" }
+    get "/book"                 => redirect("/book")
+    get "/videos"               => redirect("/videos")
+    get "/external-links"       => redirect("doc/ext")
+  end
 
   get "/course/svn" => "site#svn"
-  get "/sfc" => "site#sfc"
-  get "/trademark" => "site#trademark"
+  get "/sfc"        => "site#sfc"
+  get "/site"       => "site#about"
+  get "/trademark"  => redirect("/about/trademark")
 
   get "/contributors" => redirect("https://github.com/git/git/graphs/contributors")
 
-  root :to => 'site#index'
+  root to: "site#index"
 end

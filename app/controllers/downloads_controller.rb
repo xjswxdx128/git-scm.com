@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DownloadsController < ApplicationController
 
   def index
@@ -5,11 +7,13 @@ class DownloadsController < ApplicationController
 
   def latest
     latest = Version.latest_version.name
-    render :text => latest
+    render text: latest
   end
 
   def guis
-    render "downloads/guis/index"
+    guis_info = GuiPresenter.instance.guis_info
+
+    render "downloads/guis/index", locals: {guis_info: guis_info}
   end
 
   def logos
@@ -18,32 +22,49 @@ class DownloadsController < ApplicationController
 
   def gui
     @platform = params[:platform]
-    @platform = 'windows' if @platform == 'win'
-    render "downloads/guis/index"
+    @platform = "windows" if @platform == "win"
+
+    guis_info = GuiPresenter.instance.guis_info
+
+    render "downloads/guis/index", locals: {guis_info: guis_info}
   end
 
   def download
     @platform = params[:platform]
-    @platform = 'windows' if @platform == 'win'
-    if @platform == 'windows' || @platform == 'mac'
-      if @platform == 'windows'
-        @project_url  = "https://msysgit.github.io/"
-        @source_url   = "https://github.com/msysgit/git/"
-      else
-        @project_url = "http://sourceforge.net/projects/git-osx-installer/"
-        @source_url   = "https://github.com/git/git/"
-      end
+    @platform = "windows" if @platform == "win"
+    if @platform == "mac"
+      @project_url = "https://sourceforge.net/projects/git-osx-installer/"
+      @source_url   = "https://github.com/git/git/"
 
       @download = Download.latest_for(@platform)
       @latest = Version.latest_version
 
       render "downloads/downloading"
-    elsif @platform == 'linux'
+    elsif @platform == "windows"
+      @project_url = "https://git-for-windows.github.io/"
+      @source_url = "https://github.com/git-for-windows/git"
+
+      @download32 = Download.latest_for(@platform + "32")
+      @download64 = Download.latest_for(@platform + "64")
+      @download32portable = Download.latest_for(@platform + "32Portable")
+      @download64portable = Download.latest_for(@platform + "64Portable")
+      @latest = Version.latest_version
+
+      if request.env["HTTP_USER_AGENT"] =~ /WOW64|Win64/
+        @download = @download64
+        @bitness = "64-bit"
+      else
+        @download = @download32
+        @bitness = "32-bit"
+      end
+
+      render "downloads/download_windows"
+    elsif @platform == "linux"
       render "downloads/download_linux"
     else
-      redirect_to '/downloads'
+      redirect_to "/downloads"
     end
   rescue
-    redirect_to '/downloads'
+    redirect_to "/downloads"
   end
 end

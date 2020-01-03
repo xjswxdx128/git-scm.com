@@ -1,6 +1,8 @@
-require 'spec_helper'
+# frozen_string_literal: true
 
-describe Book do
+require "rails_helper"
+
+RSpec.describe Book, type: :model do
 
   let(:book) { Fabricate(:book) }
 
@@ -8,13 +10,13 @@ describe Book do
   it { should have_many(:sections).through(:chapters) }
 
   it "has chapters" do
-    book.chapters.any?.should be_true
-    book.chapters.count.should == 3
+    expect(book.chapters.any?).to be_truthy
+    expect(book.chapters.count).to eql(3)
   end
 
   it "should have 4 chapters" do
     chapter = Fabricate(:chapter, book: book)
-    book.chapters.count.should == 4
+    expect(book.chapters.count).to eql(4)
   end
 
 end

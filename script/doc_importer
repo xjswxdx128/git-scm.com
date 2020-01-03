@@ -1,13 +1,14 @@
 #!/usr/bin/env ruby
-require 'asciidoctor'
-require 'pp'
+# frozen_string_literal: true
+
+require "asciidoctor"
+require "pp"
 
 file_path = File.expand_path("./spec/data/git-diff.txt")
-templates_path = File.expand_path("./templates")
 
 content = File.read(file_path)
-content.gsub!(/::(.*)\.txt/,"::\\1")
-doc = Asciidoctor::Document.new(content, template_dir: templates_path)
+content.gsub!(/::(.*)\.txt/, "::\\1")
+doc = Asciidoctor::Document.new(content)
 html = doc.render
 html.gsub!(/linkgit:(.*)\[(\d+)\]/) do |line|
   x = /^linkgit:(.*)\[(\d+)\]/.match(line)
@@ -17,4 +18,3 @@ end
 File.open("./git-diff.html", "w+") do |f|
  f.write html
 end
-

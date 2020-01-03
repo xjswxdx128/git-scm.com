@@ -3,7 +3,6 @@
 <%- @page_title = "Git - Book" %>
 
 <% content_for :sidebar do %>
-  <%= render 'ebooks' %>
   <%= render 'translations' %>
 <% end %>
 
@@ -13,7 +12,7 @@
     <div style="float:right;margin: -20px 40px 0 40px;">
       <img  src="/images/progit2.png" width="118" height="157"/>
       <div style="light">2nd Edition (2014)</div>
-      <div class="switch"><a href="/book/<%= @book.code %>/v1">Switch to 1st Edition</a></div>
+      <% if (@book.ebook_pdf || @book.ebook_epub || @book.ebook_mobi) %>
       <div class="ebook-download">
         <h2>Download Ebook</h2>
         <div class="ebooks">
@@ -28,12 +27,10 @@
           <% if @book.ebook_mobi %>
             <a href="<%= @book.ebook_mobi %>"><img width="50px" src="/images/mobi.png"/></a>
           <% end %>
-          <% if @book.ebook_html %>
-            <a href="<%= @book.ebook_html %>"><img width="50px" src="/images/html.png"/></a>
-          <% end %>
         </div>
       </div>
-    </div>
+      <% end %>
+     </div>
   <% else %>
     <div style="float:right;margin: -20px 40px 0 40px;">
       <img  src="/images/books/pro-git@2x.jpg" width="118" height="157"/>
@@ -44,10 +41,10 @@
     </div>
   <% end %>
   <p>
-  The entire Pro Git book, written by Scott Chacon and Ben Straub and published by Apress, is available here. All content is licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution Non Commercial Share Alike 3.0 license</a>. Print versions of the book are available on <a href="http://www.amazon.com/Pro-Git-Scott-Chacon/dp/1484200772?ie=UTF8&camp=1789&creative=9325&creativeASIN=1430218339&linkCode=as2&tag=git-sfconservancy-20">Amazon.com</a>.</>
+  The entire Pro Git book, written by Scott Chacon and Ben Straub and published by Apress, is available here. All content is licensed under the <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution Non Commercial Share Alike 3.0 license</a>. Print versions of the book are available on <a href="http://www.amazon.com/Pro-Git-Scott-Chacon/dp/1484200772?ie=UTF8&camp=1789&creative=9325&creativeASIN=1430218339&linkCode=as2&tag=git-sfconservancy-20">Amazon.com</a>.</>
   </p>
   <ol class='book-toc'>
-    <% @book.chapters.each do |chapter| %>
+    <% @book.chapters.includes(:sections).each do |chapter| %>
     <% next if chapter.sections.size == 0 %>
     <li class='chapter'>
     <h2><%= chapter.cs_number %>. <a href="/book/<%= @book.code %>/v<%= @book.edition %>/<%=u chapter.sections.first.slug %>"><%= chapter.title %></a></h2>
